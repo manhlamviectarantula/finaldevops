@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  mongo-db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+  golang-app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    depends_on:
+      - mongo-db
+
+  react-app:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

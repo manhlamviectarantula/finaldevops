@@ -1,0 +1,39 @@
+version: 2.1
+
+jobs:
+  # Build ReactJS Client
+  build_client:
+    docker:
+      - image: circleci/node:16
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          working_directory: ./client
+          command: npm install
+      - run:
+          name: Build React App
+          working_directory: ./client
+          command: npm run build
+
+  # Build Golang Server
+  build_server:
+    docker:
+      - image: golang:1.23-alpine  # Cập nhật Go lên phiên bản 1.23
+    steps:
+      - checkout
+      - run:
+          name: Download Dependencies
+          working_directory: ./server
+          command: go mod download
+      - run:
+          name: Build Golang Application
+          working_directory: ./server
+          command: go build -o main
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build_client
+      - build_server
