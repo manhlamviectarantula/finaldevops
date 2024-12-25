@@ -121,5 +121,5 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "Product deleted successfully"})
 	})
 
-	r.Run(":8082")
+	r.Run(":8080")
 }
